@@ -25,3 +25,4 @@ plex.conf
 .uuid
 .spotify-token-cache
 .automatic
+.storage
