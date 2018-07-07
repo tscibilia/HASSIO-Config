@@ -1,0 +1,27 @@
+  - platform: sonos
+
+  # - platform: denonavr
+  #   name: Denon
+  #   host: 192.168.1.252
+
+  - platform: plex
+    host: 192.168.5.113
+    port: 32400
+    username: !secret plex_user
+    password: !secret plex_pass
+    include_non_clients: true
+    scan_interval: 5
+    show_all_controls: false
+    use_custom_entity_ids: true
+    use_episode_art: true
+
+  - platform: apple_tv
+    name: AppleTV
+    host: 192.168.1.138
+    start_off: true
+#    login_id: LOGIN_1
+#    credentials: CREDENTIALS_1
+
+  - platform: spotify
+    client_id: !secret spotify_id
+    client_secret: !secret spotify_secret

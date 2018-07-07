@@ -1,0 +1,261 @@
+  - id: 'camera_notify'
+    alias: 'Camera notifications'
+    trigger:
+      - platform: state
+        entity_id: camera.uvc1
+        to: 'recording'
+      - platform: state
+        entity_id: group.tracked_devices
+        to: 'not_home'
+        for: '00:05:00'
+    condition:
+      - condition: state
+        entity_id: camera.uvc1
+        state: 'recording'
+      - condition: state
+        entity_id: group.tracked_devices
+        state: 'not_home'
+    action:
+      service: notify.ios_thomas_iphone
+      data_template:
+        title: 'Motion detected'
+        message: >
+          "Motion detected on UVC1 camera!"
+        data:
+          push:
+            category: camera
+          entity_id: camera.uvc1
+
+  - id: 'update_hass_notify'
+    alias: 'Update notifications'
+    trigger:
+      platform: state
+      entity_id: updater.updater
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "Update Available"
+          message: "Home Assistant {{ states('updater.updater') }} is available. - {{ as_timestamp(now()) | timestamp_custom('%I:%M:%S %p %d%b%Y', true) }}"
+          notification_id: "update_available"
+
+  - id: 'harmony_set_input'
+    alias: 'Set Harmony via input_select'
+    hide_entity: True
+    trigger:
+      platform: state
+      entity_id: input_select.harmony
+    action:
+      service: remote.turn_on
+      entity_id: remote.harmony_hub
+      data_template:
+        activity: >
+          {% if is_state("input_select.harmony", "Watch TV") %}
+            21489113
+          {% elif is_state("input_select.harmony", "ATV") %}
+            20653774
+          {% else %}
+            -1
+          {% endif %}
+
+  - id: 'harmony_update_input' # This updates the input_select when triggered elsewhere
+    alias: 'Update Harmony input_select'
+    hide_entity: False
+    trigger:
+      platform: state
+      entity_id: remote.harmony_hub
+    action:
+      service: input_select.select_option
+      data_template:
+        entity_id: input_select.harmony
+        option: "{{ states.remote.harmony_hub.attributes.current_activity }}"
+
+  - id: 'away_mode'
+    alias: 'Away Mode'
+    trigger:
+      platform: state
+      entity_id: group.tracked_devices
+      to: 'not_home'
+      for:
+        minutes: 5
+    action:
+    #   - service: homeassistant.turn_off # christmas tree
+    #     entity_id: switch.aeotec_zw096_smart_switch_6_switch
+      - service: script.interior_off
+
+  - id: 'home_mode'
+    alias: 'Home Mode'
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: '-00:10:00'
+      - platform: state
+        entity_id: group.tracked_devices
+        to: 'home'
+    condition:
+      - condition: state
+        entity_id: group.tracked_devices
+        state: 'home'
+      - condition: time
+        after: '16:00:00'
+        before: '23:00:00'
+    action:
+    - service: homeassistant.turn_on
+      entity_id: group.living_room
+    - service: homeassistant.turn_on # undercab light
+      data:
+        entity_id: light.linear_wd500z1_wall_dimmer_switch_level
+        brightness: 80
+
+  - id: 'sunset_mode'
+    alias: 'Sunset Mode'
+    hide_entity: True
+    trigger:
+      platform: sun
+      event: sunset
+      offset: '-00:10:00'
+    action:
+      # - service: homeassistant.turn_on  # christmas lights
+      #   entity_id: switch.aeotec_zw096_smart_switch_6_switch_2
+      # - service: homeassistant.turn_on  # christmas tree
+      #   entity_id: switch.aeotec_zw096_smart_switch_6_switch
+      - service: homeassistant.turn_on  # garage door light
+        entity_id: light.ge_12724_3way_dimmer_switch_level_5
+      - service: homeassistant.turn_on  # porch light
+        data:
+          entity_id: light.ge_12724_3way_dimmer_switch_level_4
+          brightness: 200
+
+  - id: 'sunrise_mode'
+    alias: 'Sunrise Mode'
+    hide_entity: True
+    trigger:
+      platform: sun
+      event: sunrise
+      offset: '-00:10:00'
+    action:
+      - service: homeassistant.turn_off # garage door light
+        entity_id: light.ge_12724_3way_dimmer_switch_level_5
+      - service: homeassistant.turn_off # porch light
+        entity_id: light.ge_12724_3way_dimmer_switch_level_4
+      # - service: homeassistant.turn_on  # christmas tree
+      #   entity_id: switch.aeotec_zw096_smart_switch_6_switch
+
+  - id: 'heal_zwave'
+    alias: 'Heal Zwave'
+    hide_entity: True
+    trigger:
+      platform: time
+      at: '2:31:00'
+    action:
+      service: zwave.heal_network
+
+  - id: 'sonos_tts'
+    alias: 'Sonos TTS Test'
+    trigger:
+      - platform: state
+        entity_id: input_boolean.sonos_tts
+    action:
+      - service: script.sonos_tts
+        data:
+          where: 'kitchen'
+          what: 'Alert, this is a test of the text to speech system!'
+          volume: 0.5
+
+  - id: 'christmas_off'
+    alias: 'Christmas Lights Off'
+    trigger:
+      platform: time
+      at: '1:30:00'
+    action:
+      # - service: homeassistant.turn_off # christmas lights
+      #   entity_id: switch.aeotec_zw096_smart_switch_6_switch_2
+      # - service: homeassistant.turn_off # christmas tree
+      #   entity_id: switch.aeotec_zw096_smart_switch_6_switch
+
+  # - id: 'light_watchdog'
+  #   alias: 'Lighting Watchdog'
+  #   trigger:
+  #     - platform: state
+  #       entity_id: group.all_lights, group.all_switches
+  #       to: 'on'
+  #       for: '02:00:00'
+  #     - platform: state
+  #       entity_id: group.tracked_devices
+  #       to: 'not_home'
+  #     - platform: state
+  #       entity_id: sensor.motion_summary_multisensor
+  #       to: 'Idle'
+  #       for: '00:10:00'
+  #   condition:
+  #     condition: and
+  #     conditions:
+  #     - condition: state
+  #       entity_id: group.tracked_devices
+  #       state: 'not_home'
+  #     - condition: state
+  #       entity_id: sensor.motion_summary_multisensor
+  #       state: 'Idle'
+  #     - condition: or
+  #       conditions:
+  #       - condition: state
+  #         entity_id: group.all_lights
+  #         state: 'on'
+  #       - condition: state
+  #         entity_id: group.all_switches
+  #         state: 'on'
+  #   action:
+  #     - service: homeassistant.turn_off
+  #       data_template:
+  #         entity_id: "{{ trigger.entity_id }}"
+
+  # - id: 'tv_time'
+  #   alias: 'TV Time'
+  #   trigger:
+  #     platform: state
+  #     entity_id: sun.sun
+  #     to: 'below_horizon'
+  #   condition:
+  #     - condition: template
+  #       value_template: '{{ states.input_select.harmony != PowerOff }}'
+  #     - condition: state
+  #       entity_id: media_player.samsung_led55_un55f8000
+  #       state: 'on'
+  #   action:
+  #     - service: light.turn_off
+  #       entity_id: group.dining_room, group.living_room
+  #     - service: scene.turn_on
+  #       entity_id: scene.tv_time
+
+  - id: 'ring_video_downloader'
+    alias: 'Ring Video Downloader'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.ring_front_door_motion
+        from: 'off'
+        to: 'on'
+    action:
+      - service: downloader.download_file
+        data_template:
+          url: "states.camera.front_door.attributes.video_url"
+          subdir: "downloads"
+          filename: "last.mpg"
+          overwrite: true
+
+  - id: 'low_batt_warn'
+    alias: 'Low Battery Notification'
+    trigger:
+      - platform: template
+        value_template: >
+          {% for zwave in states.zwave if zwave.attributes.battery_level %}
+            {%- if zwave.attributes.battery_level | int < 26 -%}
+              {{true}}
+            {%- endif -%}
+          {%- endfor -%}
+    action:
+      - service: notify.pushover
+        data_template:
+          data:
+            title: "Low Battery Warning"
+            priority: 1
+          message: >
+            {{ trigger.from_state.attributes.friendly_name }} needs new batteries.

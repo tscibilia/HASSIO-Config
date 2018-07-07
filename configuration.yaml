@@ -1,0 +1,83 @@
+homeassistant:
+  name: Home
+  latitude: !secret latitude_home
+  longitude: !secret longitude_home
+  elevation: 21                       # Impacts weather/sunrise data (abv. sea level in meters)
+  unit_system: imperial               # metric for Metric, imperial for Imperial
+  temperature_unit: F                 # C for Celcius, F for Fahrenheit
+  time_zone: America/New_York         # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  customize: !include refs/customize.yaml               # Customization file
+  customize_glob: !include refs/customize_glob.yaml     # Customize all entities matching a pattern
+###################################################################################################
+#introduction:                        # Show links to resources in log and frontend
+frontend:                             # Enables the frontend
+  extra_html_url:
+    - /local/custom_ui/state-card-custom-ui.html
+    - /local/custom_ui/state-card-custom-alarm.html
+  extra_html_url_es5:
+    - /local/custom_ui/state-card-custom-ui-es5.html
+http:                                 # Web frontend configuration
+  api_password: !secret http_password # This adds a password (recommended!)
+  base_url: !secret http_base_url     # This is used w/ SSL/TLS
+  ip_ban_enabled: True                # Indicate if addditional IP filtering is enabled
+  login_attempts_threshold: 3         # Auto-ban after number of failed attempts
+  trusted_networks:                   # List of trusted networks
+    - 192.168.1.0/24
+    - 192.168.5.0/24
+updater:                              # Checks for available updates https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+  include_used_components: true       # Optional, sends HA devs system info to focus on popular components.
+discovery:                            # Discover some devices automatically
+  # ignore:
+  #   - denonavr
+config:                               # Enables configuration UI on frontend
+conversation:                         # Allows you to issue voice commands from the frontend
+history:                              # Enables tracking state changes on frontend
+logbook:                              # Enables events in a logbook on frontend
+map:                                  # Enables map on frontend
+sun:                                  # Track the sun
+ios:                                  # Enables iOS app configuration
+cloud: !include refs/cloud.yaml       # Enables connection to HA Cloud services
+emulated_hue:                         # Allows alexa on/off
+  host_ip: !secret alexa_host
+  listen_port: !secret alexa_port
+  expose_by_default: false
+customizer:
+  custom_ui: local
+  hide_attributes:
+    - node_id
+    - value_index
+###################################################################################################
+zwave:                                     # Enables zwave discovery
+  usb_path: /dev/ttyACM0                   # zwave discovery via this usb device (check via ssh cmd hassio hw info)
+zone: !include refs/zones.yaml             # Geolocation zone configuration
+device_tracker: !include refs/tracker.yaml # Device tracker configuration
+binary_sensor: !include refs/binary.yaml   # Device tracker configuration
+sensor: !include refs/sensor.yaml          # Weather prediction configuration
+media_player: !include refs/media.yaml     # Media player configuration
+notify: !include refs/notify.yaml          # Push notifications configuration
+#usps: !include refs/usps.yaml              # USPS Informed Delivery service (broke https://github.com/home-assistant/home-assistant/issues/9143)
+nest: !include refs/nest.yaml              # Nest auto-discovery and configuration
+cover: !include refs/doors.yaml            # Chamberlain MyQ Garage
+#mqtt: !include refs/mqtt.yaml              # MQTT configuration
+camera: !include refs/camera.yaml          # Camera configuration
+input_select: !include refs/inputs.yaml    # Input selection card configuration
+input_boolean: !include refs/booleans.yaml
+group: !include groups.yaml                # Group (cards) and View (tabs)
+switch: !include refs/cli_switch.yaml
+script: !include scripts.yaml
+automation: !include automations.yaml
+ffmpeg:                                    # Enables ring to download video to local dir
+ring:
+  username: !secret ring_user
+  password: !secret ring_pass
+downloader:
+  download_dir: downloads
+#weblink: !include refs/weblink.yaml
+tts:                                       # Text to speech
+  - platform: google
+    cache: true
+    cache_dir: tts
+    time_memory: 300
+weather:
+  - platform: darksky
+    api_key: !secret darksky_api

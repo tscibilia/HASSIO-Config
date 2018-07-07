@@ -1,0 +1,37 @@
+# Home Modes
+  guest_mode:
+    name: Guest Mode
+    icon: mdi:account-alert
+    initial: off
+
+  school_mode:
+    name: School Mode
+    icon: mdi:school
+    initial: off
+
+  alert_mode:
+    name: Alert Mode
+    icon: mdi:alert-octagram
+    initial: off
+
+# Triggers
+  sonos_tts:
+    name: Sonos TTS Test
+    initial: off
+    icon: mdi:speaker-wireless
+
+  good_night:
+    name: Good Night
+    initial: off
+
+  good_morning:
+    name: Good Morning
+    initial: off
+
+  tv_time:
+    name: TV Time
+    initial: off
+
+  work:
+    name: Work
+    initial: off

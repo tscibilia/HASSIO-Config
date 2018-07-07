@@ -1,0 +1,15 @@
+  - platform: unifi                   # Device tracker service
+    host: !secret unifi_host
+    username: !secret unifi_user
+    password: !secret unifi_pass
+    interval_seconds: 10
+    consider_home: 180
+    track_new_devices: no
+
+  - platform: automatic
+    client_id: !secret automatic_client
+    secret: !secret automatic_secret
+    current_location: false
+    devices:
+        - 2005 Nissan Pathfinder
+        - 2018 Mazda CX-5

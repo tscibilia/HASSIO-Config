@@ -1,0 +1,15 @@
+  alexa:
+    filter:
+      # include_entities:
+      #   - light.kitchen
+      include_domains:
+        - switch
+        - light
+        - cover
+      exclude_entities:
+        - switch.aeotec_zstick_disco_light
+      exclude_domains:
+        - automation
+        - media_player
+        - scene
+        - script

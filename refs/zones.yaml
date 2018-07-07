@@ -1,0 +1,23 @@
+  - name: Home
+    latitude: !secret latitude_home
+    longitude: !secret longitude_home
+    radius: 100
+    icon: mdi:home
+
+  - name: Studio1200
+    latitude: !secret latitude_studio1200
+    longitude: !secret longitude_studio1200
+    radius: 200
+    icon: mdi:city
+
+  - name: Design42
+    latitude: !secret latitude_design42
+    longitude: !secret longitude_design42
+    radius: 200
+    icon: mdi:city
+
+  - name: School
+    latitude: !secret latitude_school
+    longitude: !secret longitude_school
+    radius: 200
+    icon: mdi:bus-school

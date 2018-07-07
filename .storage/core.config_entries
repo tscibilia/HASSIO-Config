@@ -1,0 +1,30 @@
+{
+    "data": {
+        "entries": [
+            {
+                "data": {},
+                "domain": "sonos",
+                "entry_id": "8accf3152e584ec5bf2c972d4413f2d2",
+                "source": "discovery",
+                "title": "Sonos",
+                "version": 1
+            },
+            {
+                "data": {
+                    "impl_domain": "nest",
+                    "tokens": {
+                        "access_token": "c.L9ZR8oQjYWzjfnNQIXbQblAPidSgPcNNf4EhC0bRPsYXuZmScwvXIHbCZqlnzUwVfQPi7uCOkLOKm6dmAhq3YiTVQCkfHLk5Gucqw9STIbpNiZPTGmn0IhT4ApYjlxGlz3L3TAG9rZhYIc2D",
+                        "expires_in": 315360000
+                    }
+                },
+                "domain": "nest",
+                "entry_id": "cd12f55324294e528c662a1d193f9e4b",
+                "source": "import",
+                "title": "Nest (via local)",
+                "version": 1
+            }
+        ]
+    },
+    "key": "core.config_entries",
+    "version": 1
+}

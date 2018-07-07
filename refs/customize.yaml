@@ -1,0 +1,73 @@
+  # switch.aeotec_zw096_smart_switch_6_switch:
+  #   friendly_name: "Christmas Tree"                        # Name as displayed in HomeAssistant
+  #   emulated_hue_name: "Christmas Tree"                    # Spoken name for emulated Hue bridge
+  #   emulated_hue_hidden: false                             # Expose to the emulated Hue bridge
+  #   icon: mdi:pine-tree
+  #   extra_badge:
+  #     entity_id: sensor.aeotec_zw096_smart_switch_6_power
+  switch.aeotec_zw096_smart_switch_6_switch:
+    friendly_name: "Floor Lamp"                           # Name as displayed in HomeAssistant
+    emulated_hue_name: "Living Room Floor Lamp"           # Spoken name for emulated Hue bridge
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+    extra_badge:
+      entity_id: sensor.aeotec_zw096_smart_switch_6_power
+  switch.aeotec_zw096_smart_switch_6_switch_2:
+    friendly_name: "Christmas Lights"                     # Name as displayed in HomeAssistant
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+    extra_badge:
+      entity_id: sensor.aeotec_zw096_smart_switch_6_power_2
+  switch.aeotec_zw096_smart_switch_6_switch_3:
+    friendly_name: "Alice's Outlet"                       # Name as displayed in HomeAssistant
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+    extra_badge:
+      entity_id: sensor.aeotec_zw096_smart_switch_6_power_3
+  switch.ge_12722_onoff_relay_switch_switch:
+    friendly_name: "Table Lamp"                           # Name as displayed in HomeAssistant
+    emulated_hue_name: "Living Room Table Lamp"           # Spoken name for emulated Hue bridge
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+  switch.ge_12722_onoff_relay_switch_switch_2:
+    friendly_name: "Recessed Lights"                      # Name as displayed in HomeAssistant
+    emulated_hue_name: "Basement Lights"                  # Spoken name for emulated Hue bridge
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+  light.ge_12724_3way_dimmer_switch_level_5:
+    friendly_name: "Garage Door Lights"                   # Name as displayed in HomeAssistant
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+    state_card_mode: no-slider
+  light.ge_12724_3way_dimmer_switch_level:
+    friendly_name: "Hall Light"                           # Name as displayed in HomeAssistant
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+  light.ge_12724_3way_dimmer_switch_level_2:
+    friendly_name: "Recessed Lights"                      # Name as displayed in HomeAssistant
+    emulated_hue_name: "Recessed Lights"                  # Spoken name for emulated Hue bridge
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+  light.ge_12724_3way_dimmer_switch_level_3:
+    friendly_name: "Pendant Lights"                       # Name as displayed in HomeAssistant
+    emulated_hue_name: "Pendant Lights"                   # Spoken name for emulated Hue bridge
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+  light.ge_12724_3way_dimmer_switch_level_4:
+    friendly_name: "Porch Light"                          # Name as displayed in HomeAssistant
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+  light.linear_wd500z1_wall_dimmer_switch_level:
+    friendly_name: "Undercabinet Lights"                  # Name as displayed in HomeAssistant
+    emulated_hue_name: "Undercabinet Lights"              # Spoken name for emulated Hue bridge
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+  light.aeotec_zw111_nano_dimmer_level:
+    friendly_name: "Chandelier"                           # Name as displayed in HomeAssistant
+    emulated_hue_name: "Dining Room Light"                # Spoken name for emulated Hue bridge
+    emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+
+  sensor.tom_to_work:
+    icon: mdi:bus
+  sensor.tom_to_home:
+    icon: mdi:bus
+  sensor.sam_to_work:
+    icon: mdi:car
+
+  device_tracker.2018_mazda_cx5:
+    entity_picture: /local/cx5.jpg
+  device_tracker.2005_nissan_pathfinder:
+    entity_picture: /local/pathfinder.jpg
+  device_tracker.stella_iphone:
+    entity_picture: /local/stella.jpg
+  device_tracker.thomas_jr_iphone:
+    entity_picture: /local/tomjr.jpg

@@ -1,0 +1,7 @@
+  - platform: synology
+    url: !secret syno_cam
+    username: !secret syno_user
+    password: !secret syno_pass
+    verify_ssl: false
+
+  - platform: ring

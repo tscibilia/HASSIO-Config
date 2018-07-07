@@ -1,0 +1,7 @@
+  harmony:
+    name: Harmony
+    options:
+      - PowerOff
+      - ATV
+      - Watch TV
+    icon: mdi:monitor

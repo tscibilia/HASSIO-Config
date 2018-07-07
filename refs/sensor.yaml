@@ -1,0 +1,185 @@
+  - platform: wunderground            # Weather sensor service
+    api_key: !secret wunderground_api
+    monitored_conditions:
+      - weather_1d
+      - alerts
+      - temp_f
+
+  - platform: ring                    # Ring doorbell service
+
+  - platform: ups                     # UPS sensor service
+    username: !secret ups_user
+    password: !secret ups_pass
+    update_interval: 02:00
+
+  - platform: fedex                   # FedEx sensor service
+    username: !secret fedex_user
+    password: !secret fedex_pass
+    update_interval: 02:00
+
+  - platform: nest                    # Nest sensor service
+    monitored_conditions:
+      - 'battery_level'
+      - 'weather_condition'
+      - 'weather_temperature'
+      - 'weather_humidity'
+      - 'humidity'
+      - 'temperature'
+      - 'wind_speed'
+      - 'wind_direction'
+
+  - platform: template
+    sensors:
+      status_smoke_co_alarm:
+        value_template: >-
+            {%- if is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type", "1") %}
+                Fire-1
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type", "2") %}
+                CO-1
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type", "12") %}
+                Test-1
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type", "9") %}
+                ERR-1
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_2", "1") %}
+                Fire-2
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_2", "2") %}
+                CO-2
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_2", "12") %}
+                Test-2
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_2", "9") %}
+                ERR-2
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_3", "1") %}
+                Fire-B
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_3", "2") %}
+                CO-B
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_3", "12") %}
+                Test-B
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_3", "9") %}
+                ERR-B
+            {% else %}
+                Idle
+            {%- endif %}
+        friendly_name: 'SD/CO Alarm'
+      battery_level_smoke_co_alarm_up:
+        value_template: '{{states.zwave.first_alert_zcombo_smoke_and_carbon_monoxide_detector_2.attributes.battery_level}}'
+        friendly_name: 'Upstairs SD/CO Batt'
+        unit_of_measurement: '%'
+      battery_level_smoke_co_alarm_main:
+        value_template: '{{states.zwave.first_alert_zcombo_smoke_and_carbon_monoxide_detector.attributes.battery_level}}'
+        friendly_name: 'Main SD/CO Batt'
+        unit_of_measurement: '%'
+      battery_level_smoke_co_alarm_bsmt:
+        value_template: '{{states.zwave.first_alert_zcombo_smoke_and_carbon_monoxide_detector_3.attributes.battery_level}}'
+        friendly_name: 'Bsmt SD/CO Batt'
+        unit_of_measurement: '%'
+
+  - platform: template
+    sensors:
+      status_door_sensor:
+        value_template: >-
+            {%- if is_state("sensor.monoprice_zw15268_recessed_door_alarm_level_2", "255") and is_state("sensor.monoprice_zw15268_recessed_door_alarm_level", "255") %}
+                Fr/Ga
+            {%- elif is_state("sensor.monoprice_zw15268_recessed_door_alarm_level_2", "255") %}
+                Frnt
+            {%- elif is_state("sensor.monoprice_zw15268_recessed_door_alarm_level", "255") %}
+                Gar
+            {%- elif is_state("sensor.monoprice_zw15268_recessed_door_alarm_level", "0") %}
+                Close
+            {% else %}
+                Unknown
+            {%- endif %}
+        friendly_name: 'Door Sensor'
+      battery_level_garage_entry:
+        value_template: '{{states.zwave.monoprice_zw15268_recessed_door.attributes.battery_level}}'
+        friendly_name: 'Garage Entry Battery'
+        unit_of_measurement: '%'
+      battery_level_front_entry:
+        value_template: '{{states.zwave.monoprice_zw15268_recessed_door_2.attributes.battery_level}}'
+        friendly_name: 'Front Entry Battery'
+        unit_of_measurement: '%'
+
+  - platform: template
+    sensors:
+      motion_summary_multisensor:
+        value_template: >-
+            {%- if is_state("sensor.aeotec_zw100_multisensor_6_burglar", "8") %}
+                Motion
+            {%- elif is_state("sensor.aeotec_zw100_multisensor_6_burglar", "0") %}
+                Idle
+            {% else %}
+                Unknown
+            {%- endif %}
+        friendly_name: 'Motion'
+      battery_level_multisensor:
+        value_template: '{{states.zwave.aeotec_zw100_multisensor_6.attributes.battery_level}}'
+        friendly_name: 'Motion Battery'
+        unit_of_measurement: '%'
+
+  - platform: template
+    sensors:
+      front_door_outdoor_movement:
+        friendly_name: 'Door Movement'
+        value_template: '{% if is_state("binary_sensor.ring_front_door_motion", "on") %}Movement detected{% else %}No movement{% endif %}'
+        icon_template: '{% if is_state("binary_sensor.ring_front_door_motion", "on") %}mdi:run-fast{% else %}mdi:sleep{% endif %}'
+      front_door_latest_ding:
+        friendly_name: 'Door Last Ding'
+        value_template: '{{ as_timestamp(states.sensor.ring_front_door_last_ding.attributes.created_at) | timestamp_custom("%I:%M%p") }}'
+        icon_template: '{% if is_state("binary_sensor.ring_front_door_ding", "on") %}mdi:bell-ring-outline{% else %}mdi:bell-outline{% endif %}'
+      front_door_latest_motion:
+        friendly_name: 'Door Last Motion'
+        value_template: '{{ as_timestamp(states.sensor.ring_front_door_last_motion.attributes.created_at) | timestamp_custom("%I:%M%p") }}'
+        icon_template: '{% if is_state("binary_sensor.ring_front_door_motion", "on") %}mdi:bell-ring-outline{% else %}mdi:bell-outline{% endif %}'
+
+#  - platform: synologydsm
+#    host: !secret syno_host
+#    username: !secret syno_user
+#    password: !secret syno_pass
+#    monitored_conditions:
+#      - cpu_total_load
+#      - memory_real_usage
+#      - network_up
+
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /home
+      - type: memory_free
+      - type: processor_use
+
+  - platform: google_travel_time
+    name: Tom to Work
+    api_key: !secret google_travel_api
+    origin: Home
+    destination: Design42
+    options:
+      mode: transit
+      transit_mode: bus
+      traffic_model: best_guess
+
+  - platform: google_travel_time
+    name: Sam to Work
+    api_key: !secret google_travel_api
+    origin: School
+    destination: Studio1200
+    options:
+      mode: driving
+      traffic_model: pessimistic
+
+  - platform: google_travel_time
+    name: Tom to Home
+    api_key: !secret google_travel_api
+    origin: Design42
+    destination: Home
+    options:
+      mode: transit
+      transit_mode: bus
+      traffic_model: pessimistic
+
+  # - platform: gtfs
+  #   origin: 16578
+  #   destination: 43310
+  #   data: njtransit.zip
+  #
+  # - platform: scrape
+  #   resource: http://mybusnow.njtransit.com/bustime/eta/eta.jsp?route=---&direction=---&stop=---&id=28487&showAllBusses=on&findstop=on
+  #   select: "div#time1"

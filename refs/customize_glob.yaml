@@ -1,0 +1,62 @@
+  "*.*":
+    custom_ui_state_card: state-card-custom-ui            # Activate custom_ui feature
+  "switch.aeotec_*":
+    icon: mdi:power-socket-us
+  "switch.ge_*":
+    icon: mdi:lightbulb
+  "switch.*":
+    hide_control: false                                   # Hide toggle controls
+    show_last_changed: true                               # Show second line when last changed
+    confirm_controls_show_lock: false                     # Lock toggle controls
+    extra_badge:
+      attribute: power_consumption                        # Gets metadata from entity when no sensor exists
+      unit: W                                             # Sets value to metadata integer
+      blacklist_states: 0                                 # Turns off badge when state is off
+  "climate.*":
+    state_card_mode: break-slider                         # Slider on second line, toggle on first line
+    stretch_slider: true                                  # Slider takes full width
+    hide_control: false                                   # Hide toggle controls
+    show_last_changed: true                               # Show second line when last changed
+    confirm_controls_show_lock: false                     # Lock toggle controls
+    slider_theme:
+      min: 0                                              # Min slider value
+      max: 100                                            # Max slider value (255 light, 100 cover)
+      pin: true                                           # Display numeric value when moving the slider
+      off_when_min: true                                  # Turn the light off when value is 0
+      report_when_not_changed: false                      # Report if you changed your mind
+  "light.*":
+    icon: mdi:lightbulb
+    state_card_mode: break-slider                         # Slider on second line, toggle on first line
+    stretch_slider: true                                  # Slider takes full width
+    hide_control: false                                   # Hide toggle controls
+    show_last_changed: true                               # Show second line when last changed
+    confirm_controls_show_lock: false                     # Lock toggle controls
+    slider_theme:
+      min: 0                                              # Min slider value
+      max: 255                                            # Max slider value (255 light, 100 cover)
+      pin: true                                           # Display numeric value when moving the slider
+      off_when_min: true                                  # Turn the light off when value is 0
+      report_when_not_changed: false                      # Report if you changed your mind
+    extra_badge:
+      attribute: power_consumption                        # Gets metadata from entity when no sensor exists
+      unit: W                                             # Sets value to metadata integer
+      blacklist_states: 0                                 # Turns off badge when state is off
+  "group.all_*":
+    hidden: false
+  "device_tracker.*":
+    show_last_changed: true                               # Show second line when last changed
+  "sensor.battery_*":
+    state_card_mode: badges
+
+  device_tracker.thomas_iphone:
+    extra_badge:
+      attribute: sensor.thomas_iphone_battery_level       # Gets metadata from entity when no sensor exists
+  device_tracker.samantha_iphone:
+    extra_badge:
+      attribute: sensor.samantha_iphone_battery_level     # Gets metadata from entity when no sensor exists
+  cover.garage_door_opener:
+    friendly_name: "Garage Door"
+    show_last_changed: true                               # Show second line when last changed
+  alarm_control_panel.alarm:
+    friendly_name: Security
+    state_card_custom_ui_secondary: state-card-custom_alarm
