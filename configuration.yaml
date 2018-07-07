@@ -27,8 +27,10 @@ http:                                 # Web frontend configuration
 updater:                              # Checks for available updates https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
   include_used_components: true       # Optional, sends HA devs system info to focus on popular components.
 discovery:                            # Discover some devices automatically
-  # ignore:
-  #   - denonavr
+  ignore:                             # Ignore some auto-discovery devices (list below)
+    - denonavr
+recorder:                             # Enables support for tracking state changes over time.
+  purge_days: 14                      # Delete events and states older than 2 weeks
 config:                               # Enables configuration UI on frontend
 conversation:                         # Allows you to issue voice commands from the frontend
 history:                              # Enables tracking state changes on frontend
@@ -41,7 +43,7 @@ emulated_hue:                         # Allows alexa on/off
   host_ip: !secret alexa_host
   listen_port: !secret alexa_port
   expose_by_default: false
-customizer:
+customizer:                           # Enables custom_ui
   custom_ui: local
   hide_attributes:
     - node_id
@@ -67,11 +69,11 @@ switch: !include refs/cli_switch.yaml
 script: !include scripts.yaml
 automation: !include automations.yaml
 ffmpeg:                                    # Enables ring to download video to local dir
-ring:
+ring:                                      # Eanbles connetion to ring servers
   username: !secret ring_user
   password: !secret ring_pass
-downloader:
-  download_dir: downloads
+downloader:                                # Enables downloader for remote files (i.e. ring)
+  download_dir: downloads                  # Provides download directory to store files
 #weblink: !include refs/weblink.yaml
 tts:                                       # Text to speech
   - platform: google
