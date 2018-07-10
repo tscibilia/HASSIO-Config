@@ -149,109 +149,126 @@
     action:
       service: zwave.heal_network
 
-  - id: 'sonos_tts'
-    alias: 'Sonos TTS Test'
+  - id: 'welcome_home'
+    alias: 'Welcome Home'
+    initial_state: 'on'
     trigger:
-      - platform: state
-        entity_id: input_boolean.sonos_tts
+      platform: state
+      entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
+      from: '0'
+      to: '255'
+    condition:
+      - condition: state
+        entity_id: group.tracked_devices
+        state: 'home'
+        for:
+          seconds: 5
     action:
       - service: script.sonos_tts
-        data:
-          where: 'kitchen'
-          what: 'Alert, this is a test of the text to speech system!'
-          volume: 0.5
+        data_template:
+          sonos_entity: media_player.kitchen
+          volume: 0.6
+          message: "Hello Shebilia family, welcome home! It looks like taco lime chicken is on the menu tonight, let's get started!"
 
-  - id: 'christmas_off'
-    alias: 'Christmas Lights Off'
+  - id: 'welcome_grandparents'
+    alias: 'Welcome Rents'
+    initial_state: 'on'
     trigger:
-      platform: time
-      at: '1:30:00'
+      platform: state
+      entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
+      from: '0'
+      to: '255'
+      for:
+        seconds: 10
+    condition:
+      condition: or
+      conditions:
+        - condition: state
+          entity_id: device_tracker.stella_iphone
+          state: 'home'
+        - condition: state
+          entity_id: device_tracker.thomas_jr_iphone
+          state: 'home'
     action:
-      # - service: homeassistant.turn_off # christmas lights
-      #   entity_id: switch.aeotec_zw096_smart_switch_6_switch_2
-      # - service: homeassistant.turn_off # christmas tree
-      #   entity_id: switch.aeotec_zw096_smart_switch_6_switch
+      - service: script.sonos_tts
+        data_template:
+          sonos_entity: media_player.kitchen
+          volume: 0.6
+          message: "Hello Thomas & Stella, your son configured me to greet you! I can be programmed to tell you information such as the outside temperature is {{ states.weather.dark_sky.attributes.temperature }} degrees, but inside it's {{ states.climate.dining_room_nest.attributes.current_temperature }} degrees. Enjoy your day!"
 
-  # - id: 'light_watchdog'
-  #   alias: 'Lighting Watchdog'
-  #   trigger:
-  #     - platform: state
-  #       entity_id: group.all_lights, group.all_switches
-  #       to: 'on'
-  #       for: '02:00:00'
-  #     - platform: state
-  #       entity_id: group.tracked_devices
-  #       to: 'not_home'
-  #     - platform: state
-  #       entity_id: sensor.motion_summary_multisensor
-  #       to: 'Idle'
-  #       for: '00:10:00'
-  #   condition:
-  #     condition: and
-  #     conditions:
-  #     - condition: state
-  #       entity_id: group.tracked_devices
-  #       state: 'not_home'
-  #     - condition: state
-  #       entity_id: sensor.motion_summary_multisensor
-  #       state: 'Idle'
-  #     - condition: or
-  #       conditions:
-  #       - condition: state
-  #         entity_id: group.all_lights
-  #         state: 'on'
-  #       - condition: state
-  #         entity_id: group.all_switches
-  #         state: 'on'
-  #   action:
-  #     - service: homeassistant.turn_off
-  #       data_template:
-  #         entity_id: "{{ trigger.entity_id }}"
-
-  # - id: 'tv_time'
-  #   alias: 'TV Time'
-  #   trigger:
-  #     platform: state
-  #     entity_id: sun.sun
-  #     to: 'below_horizon'
-  #   condition:
-  #     - condition: template
-  #       value_template: '{{ states.input_select.harmony != PowerOff }}'
-  #     - condition: state
-  #       entity_id: media_player.samsung_led55_un55f8000
-  #       state: 'on'
-  #   action:
-  #     - service: light.turn_off
-  #       entity_id: group.dining_room, group.living_room
-  #     - service: scene.turn_on
-  #       entity_id: scene.tv_time
+  - id: 'welcome_rents_alice'
+    alias: 'Welcome Rents & Alice'
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
+      from: '0'
+      to: '255'
+      for:
+        seconds: 10
+    condition:
+      condition: and
+      conditions:
+        - condition: time
+          after: '15:00:00'
+          weekday:
+            - wed
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: device_tracker.stella_iphone
+              state: 'home'
+            - condition: state
+              entity_id: device_tracker.thomas_jr_iphone
+              state: 'home'
+    action:
+      - service: script.sonos_tts
+        data_template:
+          sonos_entity: media_player.kitchen
+          volume: 0.6
+          message: "Welcome back Thomas & Stella, it looks like you picked up Alice from school. Hello Alice! Why don't you show grandma and grandpa your A B C Mouse app."
 
   - id: 'ring_video_downloader'
     alias: 'Ring Video Downloader'
+    initial_state: 'on'
     trigger:
-      - platform: state
-        entity_id: binary_sensor.ring_front_door_motion
-        from: 'off'
-        to: 'on'
+      platform: state
+      entity_id: binary_sensor.ring_front_door_motion
+      from: 'off'
+      to: 'on'
     action:
       - service: downloader.download_file
         data_template:
-          url: "states.camera.front_door.attributes.video_url"
-          subdir: "downloads"
+          url: "{{ states.camera.front_door.attributes.video_url }}"
+          subdir: "ring"
           filename: "last.mpg"
           overwrite: true
 
   - id: 'low_batt_warn'
     alias: 'Low Battery Notification'
+    initial_state: 'on'
     trigger:
-      - platform: template
-        value_template: >
-          {% for zwave in states.zwave if zwave.attributes.battery_level %}
-            {%- if zwave.attributes.battery_level | int < 26 -%}
-              {{true}}
-            {%- endif -%}
-          {%- endfor -%}
+      platform: template
+      value_template: >
+        {%- set threshold = 30 -%}
+        {%- set domains = ['light', 'switch', 'sensor', 'zwave', 'lock'] -%}
+        {%- for domain in domains -%}
+        {%- for item in states[domain] if ((item.attributes.battery_level is defined and item.attributes['battery_level'] | int < threshold) or ("battery" in item.name | lower and ((item.state | int < threshold and item.state|int != 0) or item.state | lower == "low" or item.state | lower == "unknown"))) -%}
+            {{ item.attributes.friendly_name }}{%- if not loop.last %}, {% endif -%}
+        {%- endfor -%}
+        {%- endfor -%}
+#        {% for zwave in states.zwave if zwave.attributes.battery_level %}
+#          {%- if zwave.attributes.battery_level | int < 26 -%}
+#            {{true}}
+#          {%- endif -%}
+#        {%- endfor -%}
     action:
+      - service: persistent_notification.create
+        data_template:
+          title: "Low Battery Warning"
+          notification_id: low-battery-alert
+          message: >
+            {{ trigger.from_state.attributes.friendly_name }} needs new batteries.
       - service: notify.pushover
         data_template:
           data:
@@ -259,3 +276,68 @@
             priority: 1
           message: >
             {{ trigger.from_state.attributes.friendly_name }} needs new batteries.
+
+#  - id: 'christmas_off'
+#    alias: 'Christmas Lights Off'
+#    trigger:
+#      platform: time
+#      at: '1:30:00'
+#    action:
+#      - service: homeassistant.turn_off # christmas lights
+#        entity_id: switch.aeotec_zw096_smart_switch_6_switch_2
+#      - service: homeassistant.turn_off # christmas tree
+#        entity_id: switch.aeotec_zw096_smart_switch_6_switch
+
+#  - id: 'light_watchdog'
+#    alias: 'Lighting Watchdog'
+#    trigger:
+#      - platform: state
+#        entity_id: group.all_lights, group.all_switches
+#        to: 'on'
+#        for: '02:00:00'
+#      - platform: state
+#        entity_id: group.tracked_devices
+#        to: 'not_home'
+#      - platform: state
+#        entity_id: sensor.motion_summary_multisensor
+#        to: 'Idle'
+#        for: '00:10:00'
+#    condition:
+#      condition: and
+#      conditions:
+#      - condition: state
+#        entity_id: group.tracked_devices
+#        state: 'not_home'
+#      - condition: state
+#        entity_id: sensor.motion_summary_multisensor
+#        state: 'Idle'
+#      - condition: or
+#        conditions:
+#        - condition: state
+#          entity_id: group.all_lights
+#          state: 'on'
+#        - condition: state
+#          entity_id: group.all_switches
+#          state: 'on'
+#    action:
+#      - service: homeassistant.turn_off
+#        data_template:
+#          entity_id: "{{ trigger.entity_id }}"
+
+#  - id: 'tv_time'
+#    alias: 'TV Time'
+#    trigger:
+#      platform: state
+#      entity_id: sun.sun
+#      to: 'below_horizon'
+#    condition:
+#      - condition: template
+#        value_template: '{{ states.input_select.harmony != PowerOff }}'
+#      - condition: state
+#        entity_id: media_player.samsung_led55_un55f8000
+#        state: 'on'
+#    action:
+#      - service: light.turn_off
+#        entity_id: group.dining_room, group.living_room
+#      - service: scene.turn_on
+#        entity_id: scene.tv_time

@@ -16,23 +16,18 @@ views:
         image: https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=240&w=495
         title: Picture glance
         entities:
-          - switch.decorative_lights
-          - light.ceiling_lights
-          - lock.front_door
-          - binary_sensor.movement_backyard
-          - binary_sensor.basement_floor_wet
+          - switch.ge_12722_onoff_relay_switch_switch
+          - light.aeotec_zw111_nano_dimmer_level
 
       - type: weather-forecast
-        entity: weather.demo_weather_north
+        entity: weather.dark_sky
       - type: media-control
-        entity: media_player.lounge_room
-      - type: plant-status
-        entity: plant.bonsai
+        entity: media_player.kitchen
       - type: history-graph
         title: history-graph
         entities:
-          - sensor.outside_temperature
-          - media_player.lounge_room
+          - sensor.pws_temp_f
+          - media_player.alices_bedroom
 
   - title: Stacks
     id: stacks
@@ -40,57 +35,53 @@ views:
       - type: vertical-stack
         cards:
           - type: media-control
-            entity: media_player.lounge_room
+            entity: media_player.alices_bedroom
           - type: picture-entity
-            entity: camera.demo_camera
+            entity: camera.uvc1
           - type: media-control
-            entity: media_player.lounge_room
+            entity: media_player.alices_bedroom
           - type: picture-entity
-            entity: camera.demo_camera
+            entity: camera.uvc1
       - type: horizontal-stack
         cards:
           - type: media-control
-            entity: media_player.lounge_room
+            entity: media_player.alices_bedroom
           - type: picture-entity
-            entity: camera.demo_camera
+            entity: camera.uvc1
 
   - title: Entities
     cards:
       - type: entities
         entities:
-          - device_tracker.demo_paulus
-          - cover.kitchen_window
+          - device_tracker.thomas_iphone
+          - cover.garage_door_opener
           - group.kitchen
-          - lock.kitchen_door
-          - light.bed_light
+          - light.ge_12724_3way_dimmer_switch_level_2
       - type: entities
         entities:
-          - device_tracker.demo_paulus
-          - cover.kitchen_window
+          - device_tracker.thomas_iphone
+          - cover.garage_door_opener
           - group.kitchen
-          - lock.kitchen_door
-          - light.bed_light
+          - light.ge_12724_3way_dimmer_switch_level_2
         show_header_toggle: false
       - type: entities
         entities:
-          - device_tracker.demo_paulus
-          - cover.kitchen_window
+          - device_tracker.thomas_iphone
+          - cover.garage_door_opener
           - group.kitchen
-          - lock.kitchen_door
-          - light.bed_light
+          - light.ge_12724_3way_dimmer_switch_level_2
         title: toggle-able
       - type: entities
         entities:
-          - device_tracker.demo_paulus
-          - cover.kitchen_window
+          - device_tracker.thomas_iphone
+          - cover.garage_door_opener
           - group.kitchen
-          - lock.kitchen_door
-          - light.bed_light
+          - light.ge_12724_3way_dimmer_switch_level_2
         title: toggle-able, toggle = false
         show_header_toggle: false
       - type: entities
         entities:
-          - device_tracker.demo_paulus
+          - device_tracker.thomas_iphone
         title: not toggle-able
       # - type: entities
       #   title: no entities
@@ -99,9 +90,8 @@ views:
     cards:
       - type: entity-filter
         entities:
-          - device_tracker.demo_paulus
-          - device_tracker.demo_anne_therese
-          - device_tracker.demo_home_boy
+          - device_tracker.thomas_iphone
+          - device_tracker.samantha_iphone
         state_filter:
           - "home"
         card:
@@ -109,18 +99,16 @@ views:
           title: People at home
       - type: entity-filter
         entities:
-          - light.bed_light
-          - light.ceiling_lights
-          - light.kitchen_lights
+          - light.ge_12724_3way_dimmer_switch_level_2
+          - light.ge_12724_3way_dimmer_switch_level_3
         state_filter:
             - "on"
         card:
           title: domain light, state on
       - type: entity-filter
         entities:
-          - light.bed_light
-          - light.ceiling_lights
-          - light.kitchen_lights
+          - light.ge_12724_3way_dimmer_switch_level_2
+          - light.linear_wd500z1_wall_dimmer_switch_level
         state_filter:
           - 'on'
           - 'off'
@@ -132,28 +120,25 @@ views:
     cards:
       - type: glance
         entities:
-          - device_tracker.demo_paulus
-          - cover.kitchen_window
+          - device_tracker.thomas_iphone
+          - cover.garage_door_opener
           - group.kitchen
-          - lock.kitchen_door
-          - light.bed_light
+          - light.ge_12724_3way_dimmer_switch_level_2
       - type: glance
         entities:
-          - device_tracker.demo_paulus
-          - cover.kitchen_window
+          - device_tracker.thomas_iphone
+          - cover.garage_door_opener
           - group.kitchen
-          - lock.kitchen_door
-          - light.bed_light
+          - light.ge_12724_3way_dimmer_switch_level_2
         title: Title
       - type: glance
         entities:
-          - entity: device_tracker.demo_paulus
+          - entity: device_tracker.thomas_iphone
             name: ¯\_(ツ)_/¯
-          - cover.kitchen_window
+          - cover.garage_door_opener
           - group.kitchen
-          - lock.kitchen_door
-          - light.bed_light
-        title: Custom name for Paulus
+          - light.ge_12724_3way_dimmer_switch_level_2
+        title: Custom name for Thomas
 
   - title: Iframe
     cards:
@@ -168,33 +153,33 @@ views:
   - title: Picture entity
     cards:
       - type: picture-entity
-        entity: light.bed_light
+        entity: light.ge_12724_3way_dimmer_switch_level_2
         image: https://images.pexels.com/photos/775219/pexels-photo-775219.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=295&w=490
       - type: picture-entity
-        entity: light.bed_light_xxx
+        entity: light.ge_12724_3way_dimmer_switch_level_2_xxx
         image: https://images.pexels.com/photos/775219/pexels-photo-775219.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=295&w=490
       - type: picture-entity
-        entity: light.bed_light
+        entity: light.ge_12724_3way_dimmer_switch_level_2
         image: https://images.pexels.com/photos/172872/pexels-photo-172872.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260
         tap_action: toggle
         name: tap_action toggle
       - type: picture-entity
-        entity: light.bed_light
+        entity: light.ge_12724_3way_dimmer_switch_level_2
         image: https://images.pexels.com/photos/775219/pexels-photo-775219.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=295&w=490
         state_image:
           "off": https://images.pexels.com/photos/172872/pexels-photo-172872.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260
         name: state_image.off only, fallback to image
       - type: picture-entity
-        entity: light.bed_light
+        entity: light.ge_12724_3way_dimmer_switch_level_2
         image: https://images.pexels.com/photos/775219/pexels-photo-775219.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=295&w=490
         state_image:
           "on": https://images.pexels.com/photos/172872/pexels-photo-172872.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260
         name: state_image.on only, fallback to image
       - type: picture-entity
-        entity: camera.demo_camera
+        entity: camera.uvc1
       - type: picture-entity
-        entity: light.bed_light
-        camera_image: camera.demo_camera
+        entity: light.ge_12724_3way_dimmer_switch_level_2
+        camera_image: camera.uvc1
         show_info: false
 
   - title: Picture elements
@@ -209,26 +194,26 @@ views:
               left: 45%
             service: light.turn_off
             service_data:
-              entity_id: light.ceiling_lights
+              entity_id: light.ge_12724_3way_dimmer_switch_level_2
           - type: state-badge
-            entity: sensor.outside_temperature
+            entity: sensor.pws_temp_f
             style:
               top: 40%
               left: 80%
           - type: state-icon
-            entity: light.ceiling_lights
+            entity: light.ge_12724_3way_dimmer_switch_level_2
             style:
               top: 30%
               left: 55%
               '--paper-item-icon-color': green
           - type: state-icon
             tap_action: toggle
-            entity: light.ceiling_lights
+            entity: light.ge_12724_3way_dimmer_switch_level_2
             style:
               top: 30%
               left: 20%
           - type: state-label
-            entity: sensor.outside_temperature
+            entity: sensor.pws_temp_f
             style:
               top: 40%
               left: 30%
@@ -247,7 +232,7 @@ views:
         elements:
           - type: state-icon
             tap_action: toggle
-            entity: light.ceiling_lights
+            entity: light.ge_12724_3way_dimmer_switch_level_2
             style:
               top: 0
               left: 20%
@@ -265,6 +250,6 @@ views:
               left: 45%
             service: light.turn_off
             service_data:
-              entity_id: light.ceiling_lights
+              entity_id: light.ge_12724_3way_dimmer_switch_level_2
       - type: weather-forecast
-        entity: weather.demo_weather_north
+        entity: weather.dark_sky

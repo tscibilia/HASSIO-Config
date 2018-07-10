@@ -55,6 +55,9 @@
     friendly_name: "Chandelier"                           # Name as displayed in HomeAssistant
     emulated_hue_name: "Dining Room Light"                # Spoken name for emulated Hue bridge
     emulated_hue_hidden: false                            # Expose to the emulated Hue bridge
+  sensor.ring_front_door_battery:
+    friendly_name: "Ring Frnt Door Batt"                  # Name as displayed in HomeAssistant
+    state_card_mode: badges
 
   sensor.tom_to_work:
     icon: mdi:bus

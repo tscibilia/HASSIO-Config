@@ -15,11 +15,6 @@
     initial: off
 
 # Triggers
-  sonos_tts:
-    name: Sonos TTS Test
-    initial: off
-    icon: mdi:speaker-wireless
-
   good_night:
     name: Good Night
     initial: off

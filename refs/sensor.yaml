@@ -28,33 +28,33 @@
       - 'wind_speed'
       - 'wind_direction'
 
-  - platform: template
+  - platform: template               # SD/CO Alarm and Battery Status
     sensors:
       status_smoke_co_alarm:
         value_template: >-
-            {%- if is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type", "1") %}
+            {%- if is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_2", "1") %}
                 Fire-1
-            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type", "2") %}
-                CO-1
-            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type", "12") %}
-                Test-1
-            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type", "9") %}
-                ERR-1
-            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_2", "1") %}
-                Fire-2
             {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_2", "2") %}
-                CO-2
+                CO-1
             {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_2", "12") %}
-                Test-2
+                Test-1
             {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_2", "9") %}
-                ERR-2
+                ERR-1
             {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_3", "1") %}
-                Fire-B
+                Fire-2
             {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_3", "2") %}
-                CO-B
+                CO-2
             {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_3", "12") %}
-                Test-B
+                Test-2
             {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_3", "9") %}
+                ERR-2
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_4", "1") %}
+                Fire-B
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_4", "2") %}
+                CO-B
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_4", "12") %}
+                Test-B
+            {%- elif is_state("sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_type_4", "9") %}
                 ERR-B
             {% else %}
                 Idle
@@ -73,7 +73,7 @@
         friendly_name: 'Bsmt SD/CO Batt'
         unit_of_measurement: '%'
 
-  - platform: template
+  - platform: template               # Door open/close sensors
     sensors:
       status_door_sensor:
         value_template: >-
@@ -130,15 +130,6 @@
         value_template: '{{ as_timestamp(states.sensor.ring_front_door_last_motion.attributes.created_at) | timestamp_custom("%I:%M%p") }}'
         icon_template: '{% if is_state("binary_sensor.ring_front_door_motion", "on") %}mdi:bell-ring-outline{% else %}mdi:bell-outline{% endif %}'
 
-#  - platform: synologydsm
-#    host: !secret syno_host
-#    username: !secret syno_user
-#    password: !secret syno_pass
-#    monitored_conditions:
-#      - cpu_total_load
-#      - memory_real_usage
-#      - network_up
-
   - platform: systemmonitor
     resources:
       - type: disk_use_percent
@@ -175,11 +166,20 @@
       transit_mode: bus
       traffic_model: pessimistic
 
-  # - platform: gtfs
-  #   origin: 16578
-  #   destination: 43310
-  #   data: njtransit.zip
-  #
-  # - platform: scrape
-  #   resource: http://mybusnow.njtransit.com/bustime/eta/eta.jsp?route=---&direction=---&stop=---&id=28487&showAllBusses=on&findstop=on
-  #   select: "div#time1"
+#  - platform: synologydsm
+#    host: !secret syno_host
+#    username: !secret syno_user
+#    password: !secret syno_pass
+#    monitored_conditions:
+#      - cpu_total_load
+#      - memory_real_usage
+#      - network_up
+
+#  - platform: gtfs
+#    origin: 16578
+#    destination: 43310
+#    data: njtransit.zip
+# 
+#  - platform: scrape
+#    resource: http://mybusnow.njtransit.com/bustime/eta/eta.jsp?route=---&direction=---&stop=---&id=28487&showAllBusses=on&findstop=on
+#    select: "div#time1"
