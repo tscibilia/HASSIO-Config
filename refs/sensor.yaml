@@ -28,7 +28,9 @@
       - 'wind_speed'
       - 'wind_direction'
 
-  - platform: template               # SD/CO Alarm and Battery Status
+#################################################################################
+# SD/CO ALARM & BATT STATUS SENSORS #############################################
+  - platform: template
     sensors:
       status_smoke_co_alarm:
         value_template: >-
@@ -73,7 +75,9 @@
         friendly_name: 'Bsmt SD/CO Batt'
         unit_of_measurement: '%'
 
-  - platform: template               # Door open/close sensors
+#################################################################################
+# DOOR OPEN/CLOSE & BATT STATUS SENSORS #########################################
+  - platform: template
     sensors:
       status_door_sensor:
         value_template: >-
@@ -84,7 +88,7 @@
             {%- elif is_state("sensor.monoprice_zw15268_recessed_door_alarm_level", "255") %}
                 Gar
             {%- elif is_state("sensor.monoprice_zw15268_recessed_door_alarm_level", "0") %}
-                Close
+                Shut
             {% else %}
                 Unknown
             {%- endif %}
@@ -98,37 +102,63 @@
         friendly_name: 'Front Entry Battery'
         unit_of_measurement: '%'
 
+#################################################################################
+# MOTION SENSORS ################################################################
   - platform: template
     sensors:
-      motion_summary_multisensor:
-        value_template: >-
-            {%- if is_state("sensor.aeotec_zw100_multisensor_6_burglar", "8") %}
-                Motion
-            {%- elif is_state("sensor.aeotec_zw100_multisensor_6_burglar", "0") %}
+      motion_summary:
+        value_template: >
+            {%- for state in states.binary_sensor 
+            if(state.attributes.device_class=="motion" and state.state=="on") -%}
+                {%- if loop.last -%}
+                {%- if loop.index > 0 -%}
+                    {%- for state in states.binary_sensor if(state.attributes.device_class=="motion" and state.state =="on") -%}
+                    {{state.name}}{%- if not loop.last -%}{%- if(loop.index+1==loop.length) %} & {%else%}, {%endif -%}{%- else%} Active{%endif -%}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- endif -%}
+            {%- else -%}
                 Idle
-            {% else %}
-                Unknown
-            {%- endif %}
-        friendly_name: 'Motion'
+            {%- endfor -%}
+        icon_template: >
+            {%- for state in states.binary_sensor 
+            if(state.attributes.device_class=="motion" and state.state=="on") -%}
+                {%- if loop.last -%}
+                {%- if loop.index > 0 -%}
+                    mdi:run-fast
+                {%- endif -%}
+                {%- endif -%}
+            {%- else -%}
+                mdi:sleep
+            {%- endfor -%}
+        friendly_name: 'Motion Summary'
       battery_level_multisensor:
         value_template: '{{states.zwave.aeotec_zw100_multisensor_6.attributes.battery_level}}'
         friendly_name: 'Motion Battery'
         unit_of_measurement: '%'
 
+#################################################################################
+# RING DOORBELL LAST MOTION AND DING SENSORS ####################################
   - platform: template
     sensors:
       front_door_outdoor_movement:
         friendly_name: 'Door Movement'
-        value_template: '{% if is_state("binary_sensor.ring_front_door_motion", "on") %}Movement detected{% else %}No movement{% endif %}'
-        icon_template: '{% if is_state("binary_sensor.ring_front_door_motion", "on") %}mdi:run-fast{% else %}mdi:sleep{% endif %}'
+        value_template: "{% if is_state('binary_sensor.ring_front_door_motion', 'on') %}Motion{% else %}Idle{% endif %}"
+        icon_template: "{%- if is_state('binary_sensor.ring_front_door_motion', 'on') -%}mdi:run-fast{%- else -%}mdi:sleep{%- endif -%}"
       front_door_latest_ding:
         friendly_name: 'Door Last Ding'
-        value_template: '{{ as_timestamp(states.sensor.ring_front_door_last_ding.attributes.created_at) | timestamp_custom("%I:%M%p") }}'
-        icon_template: '{% if is_state("binary_sensor.ring_front_door_ding", "on") %}mdi:bell-ring-outline{% else %}mdi:bell-outline{% endif %}'
+        # https://community.home-assistant.io/t/ring-doorbell/7943/382
+        # https://community.home-assistant.io/t/relative-time-template-extension/5003
+        value_template: >
+          {{ relative_time(states.sensor.ring_front_door_last_ding.attributes.created_at) | replace("seconds", "s") | replace("minutes", "m") | replace("minute", "m") | replace("hours", "h") | replace("hour", "h") | replace("days", "d") | replace("day", "d") }}
+        icon_template: "{%- if is_state('binary_sensor.ring_front_door_ding', 'on') -%}mdi:bell-ring-outline{%- else -%}mdi:bell-outline{%- endif -%}"
       front_door_latest_motion:
         friendly_name: 'Door Last Motion'
-        value_template: '{{ as_timestamp(states.sensor.ring_front_door_last_motion.attributes.created_at) | timestamp_custom("%I:%M%p") }}'
-        icon_template: '{% if is_state("binary_sensor.ring_front_door_motion", "on") %}mdi:bell-ring-outline{% else %}mdi:bell-outline{% endif %}'
+        # https://community.home-assistant.io/t/ring-doorbell/7943/382
+        # https://community.home-assistant.io/t/relative-time-template-extension/5003
+        value_template: >
+          {{ relative_time(states.sensor.ring_front_door_last_motion.attributes.created_at) | replace("seconds", "s") | replace("minutes", "m") | replace("minute", "m") | replace("hours", "h") | replace("hour", "h") | replace("days", "d") | replace("day", "d") }}
+        icon_template: "{%- if is_state('binary_sensor.ring_front_door_motion', 'on') -%}mdi:bell-ring-outline{%- else -%}mdi:bell-outline{%- endif -%}"
 
   - platform: systemmonitor
     resources:

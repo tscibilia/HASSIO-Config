@@ -24,6 +24,11 @@ http:                                      # Web frontend configuration
   trusted_networks:                        # List of trusted networks
     - 192.168.1.0/24     
     - 192.168.5.0/24     
+panel_iframe:
+  terminal:
+    title: Terminal
+    icon: mdi:console
+    url: http://hassio.local:7681
 updater:                                   # Checks for available updates https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
   include_used_components: true            # Optional, sends HA devs system info to focus on popular components.
 discovery:                                 # Discover some devices automatically
@@ -39,6 +44,7 @@ map:                                       # Enables map on frontend
 sun:                                       # Track the sun
 ios:                                       # Enables iOS app configuration
 cloud: !include refs/cloud.yaml            # Enables connection to HA Cloud services
+logger: !include logger.yaml               # Defines the level of error logging 
 ###################################################################################################
 emulated_hue:                              # Allows alexa on/off
   host_ip: !secret alexa_host
@@ -54,6 +60,10 @@ zwave:                                     # Enables zwave discovery
 nest:                                      # Nest auto-discovery and configuration
   client_id: !secret nest_id
   client_secret: !secret nest_secret
+tado:
+  username: !secret tado_user
+  password: !secret tado_pass
+sonos:                                     # New auto-discovery method since v.0.73
 zone: !include refs/zones.yaml             # Geolocation zone configuration
 device_tracker: !include refs/tracker.yaml # Device tracker configuration
 sensor: !include refs/sensor.yaml          # Weather prediction configuration
@@ -67,8 +77,7 @@ switch: !include refs/cli_switch.yaml      # CLI hacks
 group: !include groups.yaml                # Group (cards) and View (tabs)
 script: !include scripts.yaml              # Scripts specify squences of automation operations
 automation: !include automations.yaml      # Automation configuration
-binary_sensor:                             # Binary sensors configuration
-  - platform: ring
+binary_sensor: !include refs/binary.yaml   # Binary sensors configuration
 ring:                                      # Eanbles connetion to ring servers
   username: !secret ring_user
   password: !secret ring_pass

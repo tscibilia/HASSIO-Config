@@ -154,79 +154,78 @@
     initial_state: 'on'
     trigger:
       platform: state
-      entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
-      from: '0'
-      to: '255'
+      entity_id: group.tracked_devices
+      from: 'not_home'
+      to: 'home'
     condition:
-      - condition: state
-        entity_id: group.tracked_devices
-        state: 'home'
-        for:
-          seconds: 5
-    action:
-      - service: script.sonos_tts
-        data_template:
-          sonos_entity: media_player.kitchen
-          volume: 0.6
-          message: "Hello Shebilia family, welcome home! It looks like taco lime chicken is on the menu tonight, let's get started!"
-
-  - id: 'welcome_grandparents'
-    alias: 'Welcome Rents'
-    initial_state: 'on'
-    trigger:
-      platform: state
+      condition: state
       entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
-      from: '0'
-      to: '255'
+      state: '255'
       for:
-        seconds: 10
-    condition:
-      condition: or
-      conditions:
-        - condition: state
-          entity_id: device_tracker.stella_iphone
-          state: 'home'
-        - condition: state
-          entity_id: device_tracker.thomas_jr_iphone
-          state: 'home'
+        seconds: 30
     action:
       - service: script.sonos_tts
         data_template:
           sonos_entity: media_player.kitchen
           volume: 0.6
-          message: "Hello Thomas & Stella, your son configured me to greet you! I can be programmed to tell you information such as the outside temperature is {{ states.weather.dark_sky.attributes.temperature }} degrees, but inside it's {{ states.climate.dining_room_nest.attributes.current_temperature }} degrees. Enjoy your day!"
+          message: "Hello Alice Shebilia, and family. welcome home! It looks like nothing is in the fridge to make for dinner, better choose what you want to order quick!"
 
-  - id: 'welcome_rents_alice'
-    alias: 'Welcome Rents & Alice'
-    initial_state: 'on'
-    trigger:
-      platform: state
-      entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
-      from: '0'
-      to: '255'
-      for:
-        seconds: 10
-    condition:
-      condition: and
-      conditions:
-        - condition: time
-          after: '15:00:00'
-          weekday:
-            - wed
-        - condition: or
-          conditions:
-            - condition: state
-              entity_id: device_tracker.stella_iphone
-              state: 'home'
-            - condition: state
-              entity_id: device_tracker.thomas_jr_iphone
-              state: 'home'
-    action:
-      - service: script.sonos_tts
-        data_template:
-          sonos_entity: media_player.kitchen
-          volume: 0.6
-          message: "Welcome back Thomas & Stella, it looks like you picked up Alice from school. Hello Alice! Why don't you show grandma and grandpa your A B C Mouse app."
+#  - id: 'welcome_grandparents'
+#    alias: 'Welcome Rents'
+#    initial_state: 'off'
+#    trigger:
+#      platform: state
+#      entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
+#      from: '0'
+#      to: '255'
+#    condition:
+#      condition: and
+#      conditions:
+#        - condition: time
+#          before: '13:00:00'
+#          weekday:
+#            - wed
+#        - condition: template
+#          value_template: "{% if is_state('device_tracker.stella_iphone', 'home') %}true{% elif is_state('device_tracker.thomas_jr_iphone', 'home')%}true{% else %}false{% endif %}"
+#        - condition: state
+#          entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
+#          state: '255'
+#          for:
+#            seconds: 10
+#    action:
+#      - service: script.sonos_tts
+#        data_template:
+#          sonos_entity: media_player.kitchen
+#          volume: 0.6
+#          message: "Hello Thomas & Stella, your son configured me to greet you! I can be programmed to tell you information such as the outside temperature is {{ states.weather.dark_sky.attributes.temperature }} degrees, but inside it's currently {{ states.climate.dining_room_nest.attributes.current_temperature }} degrees. Enjoy your day!"
+#
+#  - id: 'welcome_rents_alice'
+#    alias: 'Welcome Rents & Alice'
+#    initial_state: 'on'
+#    trigger:
+#      platform: state
+#      entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
+#      from: '0'
+#      to: '255'
+#    condition:
+#      - condition: time
+#        after: '15:00:00'
+#        before: '18:00:00'
+#        weekday:
+#          - wed
+#      - condition: template
+#        value_template: "{% if is_state('device_tracker.stella_iphone', 'home') %}true{% elif is_state('device_tracker.thomas_jr_iphone', 'home')%}true{% else %}false{% endif %}"
+#      - condition: state
+#        entity_id: sensor.monoprice_zw15268_recessed_door_alarm_level_2
+#        state: '255'
+#        for:
+#          seconds: 10
+#    action:
+#      - service: script.sonos_tts
+#        data_template:
+#          sonos_entity: media_player.kitchen
+#          volume: 0.6
+#          message: "Welcome back Thomas & Stella, it looks like you picked up Alice from school. Hello Alice! Why don't you show grandma and grandpa your A B C Mouse app."
 
   - id: 'ring_video_downloader'
     alias: 'Ring Video Downloader'

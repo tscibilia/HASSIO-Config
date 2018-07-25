@@ -1,0 +1,23 @@
+  - platform: ring
+
+  - platform: bayesian
+    name: 'tom_home'            #OPT
+    prior: 0.5                  #REQ-how likely is this event to occur at any time
+    probability_threshold: 0.9  #OPT-prob which the sensor should trigger to 'on'
+    observations:               #REQ-influence the likelihood that the event has occurred
+      - entity_id: 'device_tracker.thomas_iphone'
+        prob_given_true: 0.5    #REQ-prob of the observation occurring, given the event is 'true'
+        platform: 'state'       #REQ-either 'state' or 'numeric_state'
+        to_state: 'home'        #REQ-the target state
+      - entity_id: 'binary_sensor.aeotec_zw100_multisensor_6_sensor'
+        prob_given_true: 0.1
+        platform: 'state'
+        to_state: 'home'
+#      - entity_id: 'device_tracker.bluetooth_tracker'
+#        prob_given_true: 0.7
+#        platform: 'state'
+#        to_state: 'home'
+#      - entity_id: 'device_tracker.icloud'
+#        prob_given_true: 0.7
+#        platform: 'state'
+#        to_state: 'home'

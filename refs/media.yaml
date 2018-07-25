@@ -1,9 +1,3 @@
-  - platform: sonos
-
-  # - platform: denonavr
-  #   name: Denon
-  #   host: 192.168.1.252
-
   - platform: plex
     host: 192.168.5.113
     port: 32400
@@ -25,3 +19,9 @@
   - platform: spotify
     client_id: !secret spotify_id
     client_secret: !secret spotify_secret
+  
+#  - platform: alexa
+  
+#  - platform: denonavr
+#    name: Denon
+#    host: 192.168.1.252

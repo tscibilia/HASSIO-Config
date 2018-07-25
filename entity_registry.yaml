@@ -583,3 +583,8 @@ sensor.first_alert_zcombo_smoke_and_carbon_monoxide_detector_alarm_level_4:
   name:
   platform: zwave
   unique_id: 26-72057594480181265
+sensor.scibilia_residence_tado_bridge_status:
+  config_entry_id:
+  name:
+  platform: tado
+  unique_id: tado bridge status 49734

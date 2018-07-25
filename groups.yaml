@@ -6,7 +6,8 @@
     entities:
       - sensor.status_door_sensor
       - sensor.status_smoke_co_alarm
-      - sensor.motion_summary_multisensor
+      #- sensor.motion_summary_multisensor
+      - sensor.motion_summary
       - sensor.front_door_latest_ding
       - sensor.front_door_latest_motion
       - camera.uvc1
@@ -163,9 +164,9 @@
   rpi_stats:
     name: 'RPi Stats'
     entities:
-      - sensor.ram_available
-      - sensor.disk_used_home
-      - sensor.cpu_used
+      - sensor.memory_free
+      - sensor.disk_use_percent_home
+      - sensor.processor_use
   tracked_devices:
     name: 'Trackers'
     entities:

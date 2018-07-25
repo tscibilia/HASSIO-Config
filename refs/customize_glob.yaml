@@ -5,6 +5,7 @@
   "switch.ge_*":
     icon: mdi:lightbulb
   "switch.*":
+    refresh_value: true                                   # https://www.reddit.com/r/homeassistant/comments/7sk4q1/dimmer_ui_lag_fix/
     hide_control: false                                   # Hide toggle controls
     show_last_changed: true                               # Show second line when last changed
     confirm_controls_show_lock: false                     # Lock toggle controls
@@ -25,7 +26,8 @@
       off_when_min: true                                  # Turn the light off when value is 0
       report_when_not_changed: false                      # Report if you changed your mind
   "light.*":
-    icon: mdi:lightbulb
+    refresh_value: true                                   # https://www.reddit.com/r/homeassistant/comments/7sk4q1/dimmer_ui_lag_fix/
+    icon: mdi:lightbulb                                   # Default icon
     state_card_mode: break-slider                         # Slider on second line, toggle on first line
     stretch_slider: true                                  # Slider takes full width
     hide_control: false                                   # Hide toggle controls

@@ -1,9 +1,10 @@
   - platform: unifi                   # Device tracker service
     host: !secret unifi_host
+    port: !secret unifi_port
     username: !secret unifi_user
     password: !secret unifi_pass
     interval_seconds: 10
-    consider_home: 180
+    detection_time: 180
     track_new_devices: no
 
   - platform: automatic
@@ -13,3 +14,17 @@
     devices:
         - 2005 Nissan Pathfinder
         - 2018 Mazda CX-5
+
+  - platform: bluetooth_tracker
+
+#  - platform: nmap_tracker
+#    hosts: 
+#      - 192.168.1.0/24
+#      - 192.168.4.0/24
+#    track_new_devices: no
+
+#  - platform: icloud2
+#    username: !secret icloud_user1
+#    password: !secret icloud_pass1
+#    account_name: tom_icloud
+#    filter_devices: 'phone'
